@@ -57,6 +57,14 @@ export class PathHighligher {
   handleHoverParticipantNode(node: string) {
     this.showParticipantDetails(this.graph.getNodeAttributes(node).participant);
     this.highlightedNodes.push(node);
+    // Show nodes that are outbound to the hovered node (e.g. delegators)
+    const outoundEdges = this.graph.outboundEdges(node);
+    outoundEdges.forEach((edge) => {
+      this.graph.setEdgeAttribute(edge, "color", "#ffd300");
+      this.highlightedEdges.push(edge);
+      this.highlightedNodes.push(this.graph.source(edge));
+    });
+    // Show nodes that are inbound to the hovered node and traverse up (e.g. delegate to root)
     for (var i = 0; i < this.highlightedNodes.length; i++) {
       this.graph.setNodeAttribute(
         this.highlightedNodes[i],
