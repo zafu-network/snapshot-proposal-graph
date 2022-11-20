@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map a network graph for votes on a Snapshot proposal</title>
+  </head>
+  <body>
+    <style>
+      html,
+      body,
+      #sigma-container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      #loading-container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        align-content: center;
+        justify-content: center;
+        overflow: hidden;
+        display: flex;
+        flex-flow: column;
+        position: absolute;
+        top: 0;
+      }
+      #search {
+        display: none;
+        position: absolute;
+        right: 1em;
+        top: 1em;
+      }
+      #details-container {
+        display: none;
+        position: absolute;
+        top: 1em;
+        left: 1em;
+      }
+    </style>
+    <div id="sigma-container"></div>
+    <div id="loading-container">
+      <b>Loading ...</b>
+      <br/>
+      <div id="loading-status"></div>
+    </div>
+    <div id="search">
+      <input type="search" id="search-input" list="suggestions" placeholder="Try searching for a node..." />
+      <datalist id="suggestions"></datalist>
+    </div>
+    <div id="details-container">
+    </div>
+    <script src="./build/bundle.js"></script>
+  </body>
+</html>
