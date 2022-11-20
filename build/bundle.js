@@ -33142,15 +33142,24 @@ class PathHighligher {
         if (this.proposal)
             this.showProposalDetails(this.proposal);
         sigma.on("enterNode", (payload) => { this.handleSelectNode(payload.node); });
-        sigma.on("clickNode", (payload) => { this.handleSelectNode(payload.node); });
-        sigma.on("leaveNode", () => {
-            if (this.proposal)
-                this.showProposalDetails(this.proposal);
-            else
-                this.hideDetails();
-            this.resetHighlightedEdges();
-            this.resetHighlightedNodes();
+        sigma.on("clickNode", (payload) => {
+            this.resetUI();
+            this.handleSelectNode(payload.node);
         });
+        sigma.on("clickStage", () => {
+            this.resetUI();
+        });
+        sigma.on("leaveNode", () => {
+            this.resetUI();
+        });
+    }
+    resetUI() {
+        if (this.proposal)
+            this.showProposalDetails(this.proposal);
+        else
+            this.hideDetails();
+        this.resetHighlightedEdges();
+        this.resetHighlightedNodes();
     }
     handleSelectNode(node) {
         const attributes = this.graph.getNodeAttributes(node);
