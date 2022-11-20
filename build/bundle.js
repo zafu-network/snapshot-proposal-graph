@@ -32932,19 +32932,6 @@ exports.loadVotes = loadVotes;
 
 "use strict";
 
-/**
- * This example shows how to use graphology and sigma to interpret a dataset and
- * to transform it to a mappable graph dataset, without going through any other
- * intermediate step.
- *
- * To do this, we start from a dataset from "The Cartography of Political
- * Science in France" extracted from:
- * https://cartosciencepolitique.sciencespo.fr/#/en
- *
- * The CSV contains one line per institution, with an interesting subject_terms
- * column. We will here transform this dataset to a institution/subject
- * bipartite network map.
- */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -33008,10 +32995,8 @@ const buildGraph = (proposalId) => __awaiter(void 0, void 0, void 0, function* (
     const votes = yield (0, votes_1.loadVotes)(proposalId);
     setLoadingStatus("Loading Delegates");
     const delegates = yield (0, delegates_1.loadDelegates)(votes, proposal.space.id);
-    // 2. Build the graph:
     setLoadingStatus("Build Graph");
     votes.forEach((participant) => {
-        // Create the institution node:
         addParticipantToGraph(graph, participant);
         graph.addEdge(proposalId, participant.address, { weight: 1 });
     });
@@ -33023,9 +33008,6 @@ const buildGraph = (proposalId) => __awaiter(void 0, void 0, void 0, function* (
             graph.addEdge(delegate, delegator.address, { weight: 1 });
         });
     });
-    // 3. Only keep the main connected component:
-    //cropToLargestConnectedComponent(graph);
-    // 4. Add colors to the nodes, based on node types:
     graph.forEachNode((node, attributes) => {
         if (attributes.nodeType !== "participant")
             return;
@@ -33033,7 +33015,6 @@ const buildGraph = (proposalId) => __awaiter(void 0, void 0, void 0, function* (
         const choice = attributes.participant.choice;
         graph.setNodeAttribute(node, "color", nodeColor(choice, hasDelegates));
     });
-    // 5. Use degrees for node sizes:
     const votingPowers = Array.from(votes.values()).map((vote) => vote.votingPower);
     const minVotingPower = Math.min(...votingPowers);
     const maxVotingPower = Math.max(...votingPowers);
@@ -33051,21 +33032,16 @@ const buildGraph = (proposalId) => __awaiter(void 0, void 0, void 0, function* (
         }
         ;
     });
-    // 6. Position nodes on a circle, then run Force Atlas 2 for a while to get
-    //    proper graph layout:
     setLoadingStatus("Prepare Layout");
     circular_1.default.assign(graph);
     const settings = graphology_layout_forceatlas2_1.default.inferSettings(graph);
     setLoadingStatus("Layout Graph");
     graphology_layout_forceatlas2_1.default.assign(graph, { settings, iterations: 200 });
-    // 7. Hide the loader from the DOM:
     const loader = document.getElementById("loading-container");
     loader.style.display = "none";
-    // 8. Finally, draw the graph using sigma:
     setLoadingStatus("Render Graph");
     const sigmaContainer = document.getElementById("sigma-container");
     const sigma = new sigma_1.default(graph, sigmaContainer, {
-        // We don't have to declare edgeProgramClasses here, because we only use the default ones ("line" and "arrow")
         nodeProgramClasses: {
             border: node_border_1.default,
         },
@@ -33079,7 +33055,6 @@ const showError = (status) => __awaiter(void 0, void 0, void 0, function* () {
     loadingContainer.textContent = status;
 });
 var url = new URL(window.location.href);
-// "0x1b48a83c44e323275a605b244a05bde89918fb9ec86be7bb83792eb26e544441"
 const proposalId = url.searchParams.get("proposal");
 console.log({ proposalId });
 buildGraph(proposalId).catch(() => {
@@ -33202,6 +33177,14 @@ class PathHighligher {
     handleHoverParticipantNode(node) {
         this.showParticipantDetails(this.graph.getNodeAttributes(node).participant);
         this.highlightedNodes.push(node);
+        // Show nodes that are outbound to the hovered node (e.g. delegators)
+        const outoundEdges = this.graph.inboundEdges(node);
+        outoundEdges.forEach((edge) => {
+            this.graph.setEdgeAttribute(edge, "color", "#ff0000");
+            this.highlightedEdges.push(edge);
+            this.highlightedNodes.push(this.graph.source(edge));
+        });
+        // Show nodes that are inbound to the hovered node and traverse up (e.g. delegate to root)
         for (var i = 0; i < this.highlightedNodes.length; i++) {
             this.graph.setNodeAttribute(this.highlightedNodes[i], "highlighted", true);
             const inboundEdges = this.graph.inboundEdges(this.highlightedNodes[i]);
