@@ -21,13 +21,23 @@ export class PathHighligher {
     this.proposal = proposal;
     if (this.proposal) this.showProposalDetails(this.proposal);
     sigma.on("enterNode", (payload) => { this.handleSelectNode(payload.node) });
-    sigma.on("clickNode", (payload) => { this.handleSelectNode(payload.node) })
+    sigma.on("clickNode", (payload) => { 
+      this.resetUI()
+      this.handleSelectNode(payload.node) 
+    })
+    sigma.on("clickStage", () => {
+      this.resetUI()
+    })
     sigma.on("leaveNode", () => {
-      if (this.proposal) this.showProposalDetails(this.proposal);
-      else this.hideDetails();
-      this.resetHighlightedEdges();
-      this.resetHighlightedNodes();
+      this.resetUI()
     });
+  }
+
+  resetUI() {
+    if (this.proposal) this.showProposalDetails(this.proposal);
+    else this.hideDetails();
+    this.resetHighlightedEdges();
+    this.resetHighlightedNodes();
   }
 
   handleSelectNode(node: string) {
