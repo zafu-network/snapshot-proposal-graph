@@ -33178,9 +33178,9 @@ class PathHighligher {
         this.showParticipantDetails(this.graph.getNodeAttributes(node).participant);
         this.highlightedNodes.push(node);
         // Show nodes that are outbound to the hovered node (e.g. delegators)
-        const outoundEdges = this.graph.inboundEdges(node);
+        const outoundEdges = this.graph.outboundEdges(node);
         outoundEdges.forEach((edge) => {
-            this.graph.setEdgeAttribute(edge, "color", "#ff0000");
+            this.graph.setEdgeAttribute(edge, "color", "#ffd300");
             this.highlightedEdges.push(edge);
             this.highlightedNodes.push(this.graph.source(edge));
         });
