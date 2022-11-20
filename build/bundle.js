@@ -33141,19 +33141,8 @@ class PathHighligher {
         this.proposal = proposal;
         if (this.proposal)
             this.showProposalDetails(this.proposal);
-        sigma.on("enterNode", (payload) => {
-            const attributes = this.graph.getNodeAttributes(payload.node);
-            switch (attributes.nodeType) {
-                case "participant": {
-                    this.handleHoverParticipantNode(payload.node);
-                    break;
-                }
-                case "proposal": {
-                    this.handleHoverProposalNode(payload.node);
-                    break;
-                }
-            }
-        });
+        sigma.on("enterNode", (payload) => { this.handleSelectNode(payload.node); });
+        sigma.on("clickNode", (payload) => { this.handleSelectNode(payload.node); });
         sigma.on("leaveNode", () => {
             if (this.proposal)
                 this.showProposalDetails(this.proposal);
@@ -33162,6 +33151,19 @@ class PathHighligher {
             this.resetHighlightedEdges();
             this.resetHighlightedNodes();
         });
+    }
+    handleSelectNode(node) {
+        const attributes = this.graph.getNodeAttributes(node);
+        switch (attributes.nodeType) {
+            case "participant": {
+                this.handleHoverParticipantNode(node);
+                break;
+            }
+            case "proposal": {
+                this.handleHoverProposalNode(node);
+                break;
+            }
+        }
     }
     handleHoverProposalNode(node) {
         const details = this.graph.getNodeAttributes(node).proposal;
