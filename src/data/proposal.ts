@@ -9,7 +9,9 @@ export interface SnapshotProposal {
     id: string
     title: string
     choices: string[]
-    space: SnapshotSpace
+    space: SnapshotSpace,
+    start: number,
+    end: number
 }
 
 export interface SnapshotSpace {

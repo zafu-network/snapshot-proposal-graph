@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Map a network graph for votes on a Snapshot proposal</title>
+    <title>Map a timeline graph for votes on a Snapshot proposal</title>
   </head>
   <body>
     <style>
@@ -44,22 +44,11 @@
         left: 1em;
       }
     </style>
-    <div id="sigma-container"></div>
-    <div id="loading-container">
-      <b>Loading ...</b>
-      <br/>
-      <div id="loading-status"></div>
-    </div>
-    <div id="search">
-      <input type="search" id="search-input" list="suggestions" placeholder="Try searching for a node..." />
-      <datalist id="suggestions"></datalist>
-    </div>
-    <div id="details-container">
-    </div>
+    <div id="chart-container" width="100%" height="100%"><canvas id="chart-canvas"></canvas></div>
     <script src="./build/bundle.js">
     </script>
     <script>
-      zafuGraphs.renderVoteDistribution();
+      zafuGraphs.renderTimeline();
     </script>
   </body>
 </html>

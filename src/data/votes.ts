@@ -9,6 +9,7 @@ interface SnapshotHubVotes {
 interface SnapshotHubVote {
   voter: string;
   choice: number;
+  created: number;
   vp: number;
   vp_by_strategy: number[];
 }
@@ -54,6 +55,7 @@ export const loadVotes = async (
         votingPower: vote.vp,
         choice: vote.choice,
         hasDelegates: vote.vp_by_strategy[1] > 0,
+        created: vote.created
       });
     });
 

@@ -1,6 +1,9 @@
 const webpack = require("webpack");
 
 module.exports = {
+  output: {
+      library: 'zafuGraphs'
+  },
   module: {
     rules: [
       {

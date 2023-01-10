@@ -67,7 +67,8 @@ const addDelegate = (
     choice: vote?.choice || 0,
     votingPower: vote?.votingPower || 0,
     hasDelegates: vote?.hasDelegates || false,
-    space: delegation.space
+    space: delegation.space,
+    created: vote?.created || 0,
   });
 };
 
